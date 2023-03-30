@@ -11,8 +11,8 @@ import java.util.List;
 
 import com.semillero.entidades.Persona;
 
-public class PersonaRepository implements Repositorio{
-    
+public class PersonaRepository implements Repositorio {
+
     private String cadenaConexion;
 
     public PersonaRepository() {
@@ -79,8 +79,18 @@ public class PersonaRepository implements Repositorio{
 
     @Override
     public void actualizar(Object objeto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizar'");
+        try (Connection conexion = DriverManager.getConnection(cadenaConexion)) {
+            Persona persona = (Persona) objeto;
+            String sentenciaSql = "UPDATE personas SET nombre = '" + persona.getNombre() + "', apellido = '"
+                    + persona.getApellido() + "', edad = " + persona.getEdad() + ", celular = '"
+                    + persona.getCelular() + "' WHERE identificacion = '" + persona.getIdentificacion() + "';";
+            Statement sentencia = conexion.createStatement();
+            sentencia.execute(sentenciaSql);
+        } catch (SQLException e) {
+            System.err.println("Error de conexión: " + e);
+        } catch (Exception e) {
+            System.err.println("Error " + e.getMessage());
+        }
     }
 
     @Override
@@ -120,13 +130,14 @@ public class PersonaRepository implements Repositorio{
             if (resultadoConsulta != null) {
                 while (resultadoConsulta.next()) {
                     Persona persona = null;
+                    int id = resultadoConsulta.getInt("id");
                     String nombre = resultadoConsulta.getString("nombre");
                     String apellido = resultadoConsulta.getString("apellido");
                     int edad = resultadoConsulta.getInt("edad");
                     String identificacion = resultadoConsulta.getString("identificacion");
                     String celular = resultadoConsulta.getString("celular");
 
-                    persona = new Persona(nombre, apellido, edad, identificacion, celular);
+                    persona = new Persona(id, nombre, apellido, edad, identificacion, celular);
                     personas.add(persona);
                 }
                 return personas;
@@ -137,4 +148,22 @@ public class PersonaRepository implements Repositorio{
         return null;
 
     }
+
+    @Override
+    public void actualizarId(Object objeto, String id) {
+        try (Connection conexion = DriverManager.getConnection(cadenaConexion)) {
+            Persona persona = (Persona) objeto;
+            String sentenciaSql = "UPDATE personas SET nombre = '" + persona.getNombre() + "', apellido = '"
+                    + persona.getApellido() + "', edad = " + persona.getEdad() + ", celular = '"
+                    + persona.getCelular() + "'identificacion = '" + persona.getIdentificacion() + "' WHERE id = " + id
+                    + ";";
+            Statement sentencia = conexion.createStatement();
+            sentencia.execute(sentenciaSql);
+        } catch (SQLException e) {
+            System.err.println("Error de conexión: " + e);
+        } catch (Exception e) {
+            System.err.println("Error " + e.getMessage());
+        }
+    }
+
 }

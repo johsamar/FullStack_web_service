@@ -2,6 +2,7 @@ package com.semillero.entidades;
 
 public class Persona {
 
+    private int id;
     private String nombre;
     private String apellido;
     private int edad;
@@ -16,11 +17,32 @@ public class Persona {
         this.celular = celular;
     }
 
+    public Persona(int id, String nombre, String apellido, int edad, String identificacion, String celular) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
+        this.identificacion = identificacion;
+        this.celular = celular;
+    }
+
+
+
+
     // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+
     public String getNombre() {
         return nombre;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

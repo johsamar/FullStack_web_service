@@ -1,6 +1,7 @@
 package com.semillero.servicios;
 
 import java.util.List;
+import java.util.Map;
 
 import com.semillero.entidades.Persona;
 import com.semillero.repositorios.PersonaRepository;
@@ -13,7 +14,14 @@ public class PersonaService {
         repositorioPersona = new PersonaRepository();
     }
 
-    public void guardarPersona(Persona newPerson) {
+    public void guardarPersona(Map datos) {
+        String nombre = (String) datos.get("nombre");
+        String apellido = (String) datos.get("apellido");
+        int edad = (int) datos.get("edad");
+        String identificacion = (String) datos.get("identificacion");
+        String celular = (String) datos.get("celular");
+
+        Persona newPerson = new Persona(nombre, apellido, edad, identificacion, celular);
         repositorioPersona.guardar(newPerson);
     }
 
@@ -23,7 +31,7 @@ public class PersonaService {
 
     public Persona buscarPersona(String identificador) throws Exception {
         Object persona = repositorioPersona.buscar(identificador);
-        if(persona == null) {
+        if (persona == null) {
             throw new Exception("No se encontro la persona");
         }
         return (Persona) persona;
@@ -31,5 +39,27 @@ public class PersonaService {
 
     public void eliminarPersona(String identificador) {
         repositorioPersona.eliminar(identificador);
+    }
+
+    public void actualizarPersona(Map datos) {
+        String nombre = (String) datos.get("nombre");
+        String apellido = (String) datos.get("apellido");
+        int edad = (int) datos.get("edad");
+        String identificacion = (String) datos.get("identificacion");
+        String celular = (String) datos.get("celular");
+
+        Persona newPerson = new Persona(nombre, apellido, edad, identificacion, celular);
+        repositorioPersona.actualizar(newPerson);
+    }
+
+    public void actualizarPersonaId(Map datos, String id) {
+        String nombre = (String) datos.get("nombre");
+        String apellido = (String) datos.get("apellido");
+        int edad = (int) datos.get("edad");
+        String identificacion = (String) datos.get("identificacion");
+        String celular = (String) datos.get("celular");
+
+        Persona newPerson = new Persona(nombre, apellido, edad, identificacion, celular);
+        repositorioPersona.actualizarId(newPerson, id);
     }
 }
